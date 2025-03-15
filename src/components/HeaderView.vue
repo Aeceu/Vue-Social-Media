@@ -36,7 +36,7 @@ const handleLogout = () => {
 <style scoped>
 .header {
   height: 60px;
-  border-bottom: 1px solid gray;
+  border-bottom: 1px solid var(--vt-c-black-mute);
   display: flex;
   align-items: center;
   justify-content: space-between;

@@ -5,3 +5,10 @@ export type TUser = {
   email: string
   password: string
 }
+
+export type TPost = {
+  id: string
+  content: string
+  user: TUser
+  createdAt: string
+}

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import AsideView from '@/components/AsideView.vue'
 import HeaderView from '@/components/HeaderView.vue'
+import NewsFeedView from '@/components/NewsFeedView.vue'
 </script>
 
 <template>
@@ -8,7 +9,7 @@ import HeaderView from '@/components/HeaderView.vue'
     <HeaderView />
     <div class="main-container">
       <AsideView />
-      <p>HOME</p>
+      <NewsFeedView />
     </div>
   </div>
 </template>
