@@ -18,9 +18,13 @@ export const useUserStore = defineStore('userStore', () => {
 
   const editPost = ({ postId, newContent }: { postId: string; newContent: string }) => {
     posts.value = posts.value.map((item) =>
-      item.id === postId ? { ...item, content: newContent } : item,
+      item.id === postId ? { ...item, content: newContent, createdAt: new Date() } : item,
     )
   }
 
-  return { user, posts, setUser, addPost, deletePost, editPost }
+  const getPost = (postId: string | string[]) => {
+    return posts.value.find((item) => item.id === postId)
+  }
+
+  return { user, posts, setUser, addPost, deletePost, editPost, getPost }
 })

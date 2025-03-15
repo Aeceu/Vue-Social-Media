@@ -10,5 +10,5 @@ export type TPost = {
   id: string
   content: string
   user: TUser
-  createdAt: string
+  createdAt: Date
 }

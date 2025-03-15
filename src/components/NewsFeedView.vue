@@ -11,7 +11,7 @@ const handleAddPost = () => {
     userStore.addPost({
       id: Math.random().toString(),
       content: content.value,
-      createdAt: Date.now().toLocaleString(),
+      createdAt: new Date(),
       user: userStore.user,
     })
     // window.alert('New post added!')

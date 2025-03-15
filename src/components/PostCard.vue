@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore'
 import type { TPost } from '@/types/user'
+import moment from 'moment'
 import { OhVueIcon as Vicon } from 'oh-vue-icons'
 import { ref } from 'vue'
 
@@ -29,35 +30,42 @@ const handleEditPost = ({ postId, newContent }: IEditPost) => {
 
 <template>
   <div class="post-card">
-    <div class="post-header">
-      <div class="creator">
-        <img
-          src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"
-          alt="profile"
-          class="profile-photo"
-        />
-        <span class="creator-info">
-          <h3>{{ user.email }}</h3>
-          <p style="font-size: 12px; color: var(--color-text)">{{ createdAt }}</p>
-        </span>
+    <router-link
+      :to="{ name: 'post', params: { id: id } }"
+      style="text-decoration: none; color: white"
+    >
+      <div class="post-header">
+        <div class="creator">
+          <img
+            src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"
+            alt="profile"
+            class="profile-photo"
+          />
+          <span class="creator-info">
+            <h3>{{ user.email }}</h3>
+            <p style="font-size: 12px; color: var(--color-text)">
+              {{ moment(new Date(), 'YYYYMMDD').fromNow() }}
+            </p>
+          </span>
+        </div>
+        <div class="btns-container">
+          <Vicon
+            style="cursor: pointer"
+            class="icon"
+            name="fa-edit"
+            fill="green"
+            @click="open = true"
+          />
+          <Vicon
+            style="cursor: pointer"
+            class="icon"
+            @click="userStore.deletePost(id)"
+            name="fa-trash"
+            fill="red"
+          />
+        </div>
       </div>
-      <div class="btns-container">
-        <Vicon
-          style="cursor: pointer"
-          class="icon"
-          name="fa-edit"
-          fill="green"
-          @click="open = true"
-        />
-        <Vicon
-          style="cursor: pointer"
-          class="icon"
-          @click="userStore.deletePost(id)"
-          name="fa-trash"
-          fill="red"
-        />
-      </div>
-    </div>
+    </router-link>
     <div class="content">
       <p style="white-space: pre-line; line-height: 1.2; letter-spacing: 0.05">
         {{ content }} {{ console.log(content) }}
