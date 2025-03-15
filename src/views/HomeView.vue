@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import AsideView from '@/components/AsideView.vue'
 import HeaderView from '@/components/HeaderView.vue'
 import NewsFeedView from '@/components/NewsFeedView.vue'
 </script>
@@ -8,7 +7,6 @@ import NewsFeedView from '@/components/NewsFeedView.vue'
   <div class="home">
     <HeaderView />
     <div class="main-container">
-      <AsideView />
       <NewsFeedView />
     </div>
   </div>
@@ -23,6 +21,8 @@ import NewsFeedView from '@/components/NewsFeedView.vue'
 }
 
 .main-container {
+  height: calc(100vh-60px);
+  overflow-y: auto;
   height: 100%;
   display: flex;
 }

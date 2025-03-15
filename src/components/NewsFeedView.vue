@@ -1,36 +1,65 @@
 <script setup lang="ts">
+import { useUserStore } from '@/stores/userStore'
 import { ref } from 'vue'
+import PostCard from './PostCard.vue'
 
-const content = ref('')
+const content = ref<string>('')
+const userStore = useUserStore()
+
+const handleAddPost = () => {
+  if (userStore.user && content.value) {
+    userStore.addPost({
+      id: Math.random().toString(),
+      content: content.value,
+      createdAt: Date.now().toLocaleString(),
+      user: userStore.user,
+    })
+    // window.alert('New post added!')
+    content.value = ''
+  } else {
+    window.alert('Log in first!')
+  }
+}
+
+const handleCancelPost = () => {
+  content.value = ''
+}
 </script>
 
 <template>
   <div class="newsfeed">
     <div class="create-post-container">
       <textarea
-        :model="content"
+        v-model="content"
         type="text"
         class="create-post-textarea"
         placeholder="create post...."
         resizable
       />
       <span class="btns-group">
-        <button class="btn create">Create</button>
-        <button class="btn cancel">Cancel</button>
+        <button class="btn create" @click="handleAddPost">Create</button>
+        <button class="btn cancel" @click="handleCancelPost">Cancel</button>
       </span>
     </div>
+
+    <div class="post-feed" v-if="userStore.posts.length">
+      <div v-for="item in userStore.posts" :key="item.id">
+        <PostCard v-bind="item" />
+      </div>
+    </div>
+    <p v-else>No posts available.</p>
   </div>
 </template>
 
 <style scoped>
 .newsfeed {
-  max-height: 100vh;
   overflow: hidden;
   width: 100%;
   display: flex;
+  flex-direction: column;
   padding: 1em;
-  /* align-items: center; */
-  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
 }
 
 .create-post-container {
@@ -68,6 +97,13 @@ const content = ref('')
   align-items: center;
   justify-content: end;
   gap: 1em;
+}
+
+.post-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  margin-top: 1em;
 }
 
 .btn {
