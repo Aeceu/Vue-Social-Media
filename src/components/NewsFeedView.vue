@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import PostCard from './PostCard.vue'
 
 const content = ref<string>('')
+
 const userStore = useUserStore()
+
+const userPosts = computed(() => [...userStore.posts].reverse())
 
 const handleAddPost = () => {
   if (userStore.user && content.value) {
@@ -13,8 +16,9 @@ const handleAddPost = () => {
       content: content.value,
       createdAt: new Date(),
       user: userStore.user,
+      comments: [],
+      likes: [],
     })
-    // window.alert('New post added!')
     content.value = ''
   } else {
     window.alert('Log in first!')
@@ -42,12 +46,12 @@ const handleCancelPost = () => {
       </span>
     </div>
 
-    <div class="post-feed" v-if="userStore.posts.length">
-      <div v-for="item in userStore.posts" :key="item.id">
+    <div class="post-feed" v-if="userPosts.length > 0">
+      <div v-for="item in userPosts" :key="item.id">
         <PostCard v-bind="item" />
       </div>
     </div>
-    <p v-else>No posts available.</p>
+    <p v-else style="margin-top: 1em">No posts available.</p>
   </div>
 </template>
 

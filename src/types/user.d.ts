@@ -11,4 +11,20 @@ export type TPost = {
   content: string
   user: TUser
   createdAt: Date
+  comments: TComment[]
+  likes: TLikes[]
+}
+
+export type TComment = {
+  id: string
+  content: string
+  createdAt: Date
+  user: TUser
+  post: TPost
+}
+
+export type TLikes = {
+  id: string
+  user: TUser
+  post: TPost
 }

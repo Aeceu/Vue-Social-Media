@@ -33,6 +33,10 @@
   --color-heading: var(--vt-c-text-light-1);
   --color-text: var(--vt-c-text-light-1);
 
+  --color-green: rgb(16 185 129);
+  --color-blue: rgb(96 165 250);
+  --color-red: rgb(239 68 68);
+
   --section-gap: 160px;
 }
 

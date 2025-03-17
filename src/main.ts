@@ -8,15 +8,30 @@ import router from './router'
 
 import {
   FaThumbsUp,
-  FaThumbsDown,
+  FaShare,
+  FaCommentDots,
+  FaTrash,
+  FaPaperPlane,
+  FaEdit,
+  FaWindowClose,
+  PrSpinner,
+  RiRefreshLine,
+  FaArrowLeft,
+} from 'oh-vue-icons/icons'
+import { addIcons, OhVueIcon } from 'oh-vue-icons'
+
+addIcons(
+  RiRefreshLine,
+  PrSpinner,
+  FaPaperPlane,
+  FaThumbsUp,
+  FaShare,
   FaCommentDots,
   FaTrash,
   FaEdit,
   FaWindowClose,
-} from 'oh-vue-icons/icons'
-import { addIcons, OhVueIcon } from 'oh-vue-icons'
-
-addIcons(FaThumbsUp, FaThumbsDown, FaCommentDots, FaTrash, FaEdit, FaWindowClose)
+  FaArrowLeft,
+)
 
 const app = createApp(App)
 

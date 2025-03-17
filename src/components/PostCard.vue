@@ -3,7 +3,7 @@ import { useUserStore } from '@/stores/userStore'
 import type { TPost } from '@/types/user'
 import moment from 'moment'
 import { OhVueIcon as Vicon } from 'oh-vue-icons'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 
 interface IEditPost {
   postId: string
@@ -13,7 +13,9 @@ interface IEditPost {
 const props = defineProps<TPost>()
 
 const userStore = useUserStore()
+const isLiked = ref(false)
 const open = ref<boolean>(false)
+
 const newData = ref(props.content)
 
 const handleCancel = () => {
@@ -26,63 +28,76 @@ const handleEditPost = ({ postId, newContent }: IEditPost) => {
   window.alert('Post updated successfully!')
   open.value = false
 }
+
+const handleLike = (postId: string) => {
+  if (userStore.user) userStore.likePost(postId, userStore.user)
+}
+
+// check if user like the post using watch()
+watch(
+  () => props.likes,
+  () => {
+    if (userStore.user) {
+      isLiked.value = props.likes.some((like) => like.user.id === userStore.user?.id)
+    }
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
   <div class="post-card">
+    <div class="post-header">
+      <div class="creator">
+        <img
+          src="https://images.pexels.com/photos/697509/pexels-photo-697509.jpeg?cs=srgb&dl=pexels-andrewperformance1-697509.jpg&fm=jpg"
+          alt="profile"
+          class="profile-photo"
+        />
+        <span class="creator-info">
+          <h3>{{ user.email }}</h3>
+          <p style="font-size: 12px; color: var(--color-text)">
+            {{ moment(new Date(), 'YYYYMMDD').fromNow() }}
+          </p>
+        </span>
+      </div>
+      <div class="btns-container">
+        <Vicon
+          style="color: var(--color-green); cursor: pointer"
+          class="icon"
+          name="fa-edit"
+          @click="open = true"
+        />
+        <Vicon
+          style="color: var(--color-red); cursor: pointer"
+          class="icon"
+          @click="userStore.deletePost(id)"
+          name="fa-trash"
+        />
+      </div>
+    </div>
     <router-link
+      class="content"
       :to="{ name: 'post', params: { id: id } }"
       style="text-decoration: none; color: white"
     >
-      <div class="post-header">
-        <div class="creator">
-          <img
-            src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"
-            alt="profile"
-            class="profile-photo"
-          />
-          <span class="creator-info">
-            <h3>{{ user.email }}</h3>
-            <p style="font-size: 12px; color: var(--color-text)">
-              {{ moment(new Date(), 'YYYYMMDD').fromNow() }}
-            </p>
-          </span>
-        </div>
-        <div class="btns-container">
-          <Vicon
-            style="cursor: pointer"
-            class="icon"
-            name="fa-edit"
-            fill="green"
-            @click="open = true"
-          />
-          <Vicon
-            style="cursor: pointer"
-            class="icon"
-            @click="userStore.deletePost(id)"
-            name="fa-trash"
-            fill="red"
-          />
-        </div>
-      </div>
-    </router-link>
-    <div class="content">
       <p style="white-space: pre-line; line-height: 1.2; letter-spacing: 0.05">
-        {{ content }} {{ console.log(content) }}
+        {{ content }}
       </p>
-    </div>
+    </router-link>
     <div class="interaction-container">
+      <button @click="handleLike(props.id)" class="interaction-btn icon">
+        <p style="color: white">{{ props.likes.length }}</p>
+        <Vicon :class="{ active: isLiked }" class="like" name="fa-thumbs-up" />
+      </button>
+
       <button class="interaction-btn icon">
-        <p>1</p>
-        <Vicon name="fa-thumbs-up" />
+        <p style="color: white">{{ props.comments.length }}</p>
+        <Vicon class="comment" name="fa-comment-dots" />
       </button>
       <button class="interaction-btn icon">
-        <p>1</p>
-        <Vicon name="fa-thumbs-down" />
-      </button>
-      <button class="interaction-btn icon">
-        <p>1</p>
-        <Vicon name="fa-comment-dots" />
+        <p style="color: white">1</p>
+        <Vicon class="share" name="fa-share" />
       </button>
     </div>
   </div>
@@ -93,13 +108,15 @@ const handleEditPost = ({ postId, newContent }: IEditPost) => {
         <div class="post-header">
           <div class="creator">
             <img
-              src="https://plus.unsplash.com/premium_photo-1689568126014-06fea9d5d341?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D"
+              src="https://images.pexels.com/photos/697509/pexels-photo-697509.jpeg?cs=srgb&dl=pexels-andrewperformance1-697509.jpg&fm=jpg"
               alt="profile"
               class="profile-photo"
             />
             <span class="creator-info">
               <h3>{{ user.email }}</h3>
-              <p style="font-size: 12px; color: var(--color-text)">{{ createdAt }}</p>
+              <p style="font-size: 12px; color: var(--color-text)">
+                {{ moment(new Date(), 'YYYYMMDD').fromNow() }}
+              </p>
             </span>
           </div>
         </div>
@@ -128,6 +145,10 @@ const handleEditPost = ({ postId, newContent }: IEditPost) => {
 </template>
 
 <style scoped>
+* {
+  /* border: 1px solid red !important; */
+}
+
 .post-card {
   padding: 1em;
   border: 1px solid var(--color-background-mute);
@@ -194,8 +215,18 @@ const handleEditPost = ({ postId, newContent }: IEditPost) => {
       gap: 1em;
 
       &:hover {
-        background: #0865fe;
         cursor: pointer;
+        /* background: var(--color-background-soft); */
+
+        .like {
+          color: var(--color-blue);
+        }
+        .comment {
+          color: var(--color-green);
+        }
+        .share {
+          color: var(--color-green);
+        }
       }
     }
   }
@@ -203,6 +234,13 @@ const handleEditPost = ({ postId, newContent }: IEditPost) => {
 
 .icon {
   color: white;
+}
+
+.icon:hover {
+  cursor: pointer;
+  scale: 1.2;
+  animation-duration: 300;
+  transition: all 0.3s;
 }
 
 .modal {
@@ -298,5 +336,9 @@ const handleEditPost = ({ postId, newContent }: IEditPost) => {
       background-color: #0865fe;
     }
   }
+}
+
+.active {
+  color: var(--color-blue);
 }
 </style>
