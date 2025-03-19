@@ -19,6 +19,8 @@ import {
   FaArrowLeft,
 } from 'oh-vue-icons/icons'
 import { addIcons, OhVueIcon } from 'oh-vue-icons'
+import Toast, { POSITION } from 'vue-toastification'
+import 'vue-toastification/dist/index.css'
 
 addIcons(
   RiRefreshLine,
@@ -31,12 +33,18 @@ addIcons(
   FaEdit,
   FaWindowClose,
   FaArrowLeft,
+  FaWindowClose,
 )
 
 const app = createApp(App)
 
 app.component('v-icons', OhVueIcon)
-app.use(createPinia())
+
 app.use(router)
+app.use(Toast, {
+  position: POSITION.TOP_LEFT,
+})
+
+app.use(createPinia())
 
 app.mount('#app')

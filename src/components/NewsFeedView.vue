@@ -2,12 +2,14 @@
 import { useUserStore } from '@/stores/userStore'
 import { ref, computed } from 'vue'
 import PostCard from './PostCard.vue'
+import SharedPostCard from './SharedPostCard.vue'
 
 const content = ref<string>('')
 
 const userStore = useUserStore()
 
 const userPosts = computed(() => [...userStore.posts].reverse())
+const userSharedPosts = computed(() => [...userStore.sharedPosts].reverse())
 
 const handleAddPost = () => {
   if (userStore.user && content.value) {
@@ -49,6 +51,9 @@ const handleCancelPost = () => {
     <div class="post-feed" v-if="userPosts.length > 0">
       <div v-for="item in userPosts" :key="item.id">
         <PostCard v-bind="item" />
+      </div>
+      <div v-for="item in userSharedPosts" :key="item.id">
+        <SharedPostCard v-bind="item" />
       </div>
     </div>
     <p v-else style="margin-top: 1em">No posts available.</p>

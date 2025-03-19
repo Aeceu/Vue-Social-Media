@@ -25,12 +25,15 @@ const handleCancel = () => {
 
 const handleEditPost = ({ postId, newContent }: IEditPost) => {
   userStore.editPost({ newContent, postId })
-  window.alert('Post updated successfully!')
   open.value = false
 }
 
 const handleLike = (postId: string) => {
   if (userStore.user) userStore.likePost(postId, userStore.user)
+}
+
+const handleSharePost = () => {
+  if (userStore.user) userStore.sharePost(props, userStore.user)
 }
 
 // check if user like the post using watch()
@@ -95,7 +98,7 @@ watch(
         <p style="color: white">{{ props.comments.length }}</p>
         <Vicon class="comment" name="fa-comment-dots" />
       </button>
-      <button class="interaction-btn icon">
+      <button class="interaction-btn icon" @click="handleSharePost">
         <p style="color: white">1</p>
         <Vicon class="share" name="fa-share" />
       </button>

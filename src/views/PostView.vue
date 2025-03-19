@@ -40,11 +40,10 @@ watch(
 <template>
   <div class="post">
     <h1 v-if="loading">Loading....</h1>
-
     <div v-if="post">
-      <Vicon @click="$router.back()" class="go-back" name="fa-arrow-left" />
-
       <div class="content">
+        <Vicon @click="$router.back()" class="go-back" name="fa-arrow-left" />
+
         <PostCard v-bind="post" />
       </div>
       <div class="comment-list">
@@ -109,7 +108,8 @@ watch(
   color: white;
   border-radius: 100%;
   position: absolute;
-  left: 24%;
+  left: -6%;
+  top: 5%;
 }
 
 .go-back:hover {
@@ -127,6 +127,10 @@ watch(
   padding: 1em;
   align-items: center;
   overflow-y: auto;
+
+  .content {
+    position: relative;
+  }
 
   .comment-list {
     width: 600px;

@@ -28,3 +28,13 @@ export type TLikes = {
   user: TUser
   post: TPost
 }
+
+export type TSharedPost = {
+  id: string
+  content: string
+  user: TUser
+  createdAt: Date
+  comments: TComment[]
+  likes: TLikes[]
+  originalPost: TPost
+}
