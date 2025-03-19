@@ -1,27 +1,142 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { TPost, TSharedPost, TUser } from '@/types/user'
+import type { TLogin, TPost, TSharedPost, TUser } from '@/types/user'
 import { useToast } from 'vue-toastification'
+import { useRouter } from 'vue-router'
 
 const toast = useToast()
 
 export const useUserStore = defineStore('userStore', () => {
+  const userToken = ref<string | null>(null)
   const user = ref<TUser | null>(null)
   const posts = ref<TPost[]>([])
   const sharedPosts = ref<TSharedPost[]>([])
   const commentsLoading = ref(false)
+  const router = useRouter()
+
+  // fetch user using token save in local storage
+  // const getUser = (token: string | null) => {}
+
+  const persistUser = () => {
+    const token = localStorage.getItem('token')
+    if (!token) return toast.error("User's token not found")
+
+    const users = localStorage.getItem('users')
+    if (!users) return toast.error('All users not found')
+
+    const foundUser = JSON.parse(users).find((item: TUser) => item.id === token)
+    if (!foundUser) return toast.error("User's data not found")
+
+    user.value = foundUser
+
+    return foundUser
+  }
+
+  const handleSignup = (newUser: TUser) => {
+    if (!newUser) return toast.error('User not found')
+
+    const users = localStorage.getItem('users')
+    if (!users) {
+      user.value = {
+        id: newUser.id,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        email: newUser.email,
+        password: newUser.password,
+      }
+
+      const updatedUsers = JSON.stringify([newUser])
+      localStorage.setItem('users', updatedUsers)
+
+      toast.success('Account created successfully')
+      return router.push('/login')
+    }
+
+    const foundUser = JSON.parse(users).find((item: TUser) => item.email === newUser.email)
+    if (foundUser) return toast.error('User already exists')
+
+    user.value = {
+      id: newUser.id,
+      firstName: newUser.firstName,
+      lastName: newUser.lastName,
+      email: newUser.email,
+      password: newUser.password,
+    }
+
+    const updatedUsers = JSON.stringify([...JSON.parse(users), newUser])
+    localStorage.setItem('users', updatedUsers)
+
+    toast.success('Account created successfully')
+    router.push('/login')
+  }
+
+  const handleLogin = (newUser: TLogin) => {
+    if (!newUser) return toast.error('User not found')
+
+    const users = localStorage.getItem('users')
+    if (!users) return toast.error('All users not found')
+
+    const foundUser = JSON.parse(users).find((item: TUser) => item.email === newUser.email)
+    if (!foundUser) return toast.error('User not found')
+
+    const isValid = foundUser.password === newUser.password
+    if (!isValid) return toast.error('Invalid password')
+
+    user.value = foundUser
+    userToken.value = foundUser.id
+    localStorage.setItem('token', foundUser.id)
+
+    toast.success('Login successfully')
+    router.push('/')
+  }
+
+  const handleLogout = () => {
+    userToken.value = null
+    user.value = null
+    localStorage.removeItem('token')
+    router.push('/login')
+  }
+
+  const getAllUsers = () => {
+    const res = localStorage.getItem('users')
+    if (res) {
+      return (user.value = JSON.parse(res))
+    }
+    return []
+  }
+
+  const getAllPosts = () => {
+    const res = localStorage.getItem('posts')
+    if (res) {
+      return (posts.value = JSON.parse(res))
+    }
+    return (posts.value = [])
+  }
+
+  const getAllSharedPost = () => {
+    const res = localStorage.getItem('sharedPosts')
+    if (res) {
+      return (posts.value = JSON.parse(res))
+    }
+    return (posts.value = [])
+  }
 
   const setUser = (newUser: TUser | null) => {
     user.value = newUser
   }
+
   const addPost = (newPost: TPost) => {
-    toast.success('Post added successfully')
     posts.value = [...posts.value, newPost]
+    const UpdatedPosts = JSON.stringify([...posts.value])
+    localStorage.setItem('posts', UpdatedPosts)
+    toast.success('Post added successfully')
   }
 
   const deletePost = (postId: string) => {
     toast.error('Post deleted successfully')
     posts.value = posts.value.filter((item) => item.id !== postId)
+    const UpdatedPosts = JSON.stringify([...posts.value])
+    localStorage.setItem('posts', UpdatedPosts)
   }
 
   const editPost = ({ postId, newContent }: { postId: string; newContent: string }) => {
@@ -29,6 +144,8 @@ export const useUserStore = defineStore('userStore', () => {
     posts.value = posts.value.map((item) =>
       item.id === postId ? { ...item, content: newContent, createdAt: new Date() } : item,
     )
+    const UpdatedPosts = JSON.stringify([...posts.value])
+    localStorage.setItem('posts', UpdatedPosts)
   }
 
   const getPost = (postId: string | string[]) => {
@@ -95,10 +212,6 @@ export const useUserStore = defineStore('userStore', () => {
     toast.success('Post shared successfully')
   }
 
-  const getAllSharedPost = () => {
-    return sharedPosts.value
-  }
-
   const getSharedPost = (postId: string) => {
     return sharedPosts.value.find((item) => item.id === postId)
   }
@@ -116,21 +229,28 @@ export const useUserStore = defineStore('userStore', () => {
   }
 
   return {
+    userToken,
     user,
     posts,
+    sharedPosts,
+    commentsLoading,
+    getAllSharedPost,
+    getAllUsers,
+    getAllPosts,
+    getPost,
+    handleLogin,
+    handleSignup,
+    handleLogout,
     setUser,
     addPost,
     likePost,
     deletePost,
     editPost,
-    getPost,
     addComment,
-    commentsLoading,
     sharePost,
-    sharedPosts,
-    getAllSharedPost,
     getSharedPost,
     updateSharedPost,
     deleteSharedPost,
+    persistUser,
   }
 })

@@ -1,21 +1,8 @@
 <script lang="ts" setup>
 import { useUserStore } from '@/stores/userStore'
+import { RouterLink } from 'vue-router'
 
 const userStore = useUserStore()
-
-const handleSetUser = () => {
-  userStore.setUser({
-    id: '1',
-    firstName: 'Jose',
-    lastName: 'Acebuche',
-    email: 'joseacebuche2@gmail.com',
-    password: '136721',
-  })
-}
-
-const handleLogout = () => {
-  userStore.setUser(null)
-}
 </script>
 
 <template>
@@ -24,11 +11,15 @@ const handleLogout = () => {
 
     <div v-if="userStore.user" class="btns-group">
       <p>{{ userStore.user.email }}</p>
-      <button @click="handleLogout" class="btn">logout</button>
+      <button @click="userStore.handleLogout" class="btn">logout</button>
     </div>
     <div v-else class="btns-group">
-      <button @click="handleSetUser" class="btn login">Login</button>
-      <button class="btn signup">Signup</button>
+      <RouterLink to="login">
+        <button class="btn login">Login</button>
+      </RouterLink>
+      <RouterLink to="signup">
+        <button class="btn signup">Signup</button>
+      </RouterLink>
     </div>
   </nav>
 </template>

@@ -10,7 +10,7 @@ export type TPost = {
   id: string
   content: string
   user: TUser
-  createdAt: Date
+  createdAt: Date | string
   comments: TComment[]
   likes: TLikes[]
 }
@@ -18,7 +18,7 @@ export type TPost = {
 export type TComment = {
   id: string
   content: string
-  createdAt: Date
+  createdAt: Date | string
   user: TUser
   post: TPost
 }
@@ -33,8 +33,13 @@ export type TSharedPost = {
   id: string
   content: string
   user: TUser
-  createdAt: Date
+  createdAt: Date | string
   comments: TComment[]
   likes: TLikes[]
   originalPost: TPost
+}
+
+export type TLogin = {
+  email: string
+  password: string
 }
