@@ -82,7 +82,7 @@ watch(
     <router-link
       class="content"
       :to="{ name: 'post', params: { id: id } }"
-      style="text-decoration: none; color: white"
+      style="text-decoration: none; color: var(--color-text)"
     >
       <p style="white-space: pre-line; line-height: 1.2; letter-spacing: 0.05">
         {{ content }}
@@ -90,16 +90,16 @@ watch(
     </router-link>
     <div class="interaction-container">
       <button @click="handleLike(props.id)" class="interaction-btn icon">
-        <p style="color: white">{{ props.likes.length }}</p>
+        <p style="color: var(--color-text)">{{ props.likes.length }}</p>
         <Vicon :class="{ active: isLiked }" class="like" name="fa-thumbs-up" />
       </button>
 
       <button class="interaction-btn icon">
-        <p style="color: white">{{ props.comments.length }}</p>
+        <p style="color: var(--color-text)">{{ props.comments.length }}</p>
         <Vicon class="comment" name="fa-comment-dots" />
       </button>
       <button class="interaction-btn icon" @click="handleSharePost">
-        <p style="color: white">1</p>
+        <p style="color: var(--color-text)">1</p>
         <Vicon class="share" name="fa-share" />
       </button>
     </div>
@@ -153,6 +153,7 @@ watch(
 }
 
 .post-card {
+  color: var(--color-text);
   padding: 1em;
   border: 1px solid var(--color-background-mute);
   border-radius: 0.5em;
@@ -192,6 +193,7 @@ watch(
   }
 
   .content {
+    color: var(--color-text);
     margin-top: 1em;
     padding: 1em;
     border: 1px solid var(--color-background-mute);
@@ -236,7 +238,7 @@ watch(
 }
 
 .icon {
-  color: white;
+  color: var(--color-text);
 }
 
 .icon:hover {
@@ -258,6 +260,7 @@ watch(
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--color-text);
 
   .modal-post-card {
     padding: 1em;
@@ -307,7 +310,7 @@ watch(
       background: inherit;
       border: none;
       outline: none;
-      color: white;
+      color: var(--color-text);
       padding: 1em;
       border-radius: 0.5em;
       border: 1px solid var(--color-background-mute);

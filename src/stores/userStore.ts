@@ -19,13 +19,13 @@ export const useUserStore = defineStore('userStore', () => {
 
   const persistUser = () => {
     const token = localStorage.getItem('token')
-    if (!token) return toast.error("User's token not found")
+    if (!token) return console.log("User's token not found")
 
     const users = localStorage.getItem('users')
-    if (!users) return toast.error('All users not found')
+    if (!users) return console.log('All users not found')
 
     const foundUser = JSON.parse(users).find((item: TUser) => item.id === token)
-    if (!foundUser) return toast.error("User's data not found")
+    if (!foundUser) return console.log("User's data not found")
 
     user.value = foundUser
 

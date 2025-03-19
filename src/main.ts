@@ -17,10 +17,16 @@ import {
   PrSpinner,
   RiRefreshLine,
   FaArrowLeft,
+  FaChevronLeft,
+  FaSearch,
+  FaMoon,
+  FaSun,
 } from 'oh-vue-icons/icons'
 import { addIcons, OhVueIcon } from 'oh-vue-icons'
 import Toast, { POSITION } from 'vue-toastification'
 import 'vue-toastification/dist/index.css'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 
 addIcons(
   RiRefreshLine,
@@ -34,6 +40,10 @@ addIcons(
   FaWindowClose,
   FaArrowLeft,
   FaWindowClose,
+  FaChevronLeft,
+  FaSearch,
+  FaMoon,
+  FaSun,
 )
 
 const app = createApp(App)
@@ -46,5 +56,6 @@ app.use(Toast, {
 })
 
 app.use(createPinia())
+app.use(ElementPlus)
 
 app.mount('#app')

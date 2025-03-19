@@ -105,7 +105,7 @@ watch(
 .go-back {
   width: 25px;
   height: 25px;
-  color: white;
+  color: var(--color-text);
   border-radius: 100%;
   position: absolute;
   left: -6%;
@@ -169,7 +169,7 @@ watch(
 
       .comment-content {
         width: 100%;
-        color: white;
+        color: var(--color-text);
       }
     }
 
@@ -185,7 +185,7 @@ watch(
         background: inherit;
         border: none;
         outline: none;
-        color: white;
+        color: var(--color-text);
         padding: 1em;
         border-radius: 0.5em;
         border: 1px solid var(--color-background-mute);
