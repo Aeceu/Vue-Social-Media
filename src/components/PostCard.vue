@@ -4,7 +4,6 @@ import type { TPost } from '@/types/user'
 import moment from 'moment'
 import { OhVueIcon as Vicon } from 'oh-vue-icons'
 import { ref, watch } from 'vue'
-
 interface IEditPost {
   postId: string
   newContent: string
@@ -36,7 +35,6 @@ const handleSharePost = () => {
   if (userStore.user) userStore.sharePost(props, userStore.user)
 }
 
-// check if user like the post using watch()
 watch(
   () => props.likes,
   () => {
@@ -88,6 +86,7 @@ watch(
         {{ content }}
       </p>
     </router-link>
+
     <img v-if="props.postImage" v-bind:src="props.postImage" alt="postImage" class="postImage" />
     <div class="interaction-container">
       <button @click="handleLike(props.id)" class="interaction-btn icon">

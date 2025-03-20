@@ -10,14 +10,23 @@ declare module 'vue' {
   export interface GlobalComponents {
     AsideView: typeof import('./src/components/AsideView.vue')['default']
     CommentView: typeof import('./src/components/CommentView.vue')['default']
+    ElAside: typeof import('element-plus/es')['ElAside']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElDialog: typeof import('element-plus/es')['ElDialog']
+    ElDivider: typeof import('element-plus/es')['ElDivider']
+    ElIcon: typeof import('element-plus/es')['ElIcon']
     ElInput: typeof import('element-plus/es')['ElInput']
+    ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
+    ElSide: typeof import('element-plus/es')['ElSide']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
+    ElUpload: typeof import('element-plus/es')['ElUpload']
     HeaderView: typeof import('./src/components/HeaderView.vue')['default']
     NewsFeedView: typeof import('./src/components/NewsFeedView.vue')['default']
     PostCard: typeof import('./src/components/PostCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SharedPostCard: typeof import('./src/components/SharedPostCard.vue')['default']
+    SideView: typeof import('./src/components/SideView.vue')['default']
+    UsersView: typeof import('./src/components/UsersView.vue')['default']
   }
 }

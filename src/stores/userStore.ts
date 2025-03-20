@@ -7,16 +7,13 @@ import { useRouter } from 'vue-router'
 const toast = useToast()
 
 export const useUserStore = defineStore('userStore', () => {
-  const userToken = ref<string | null>(null)
-  const user = ref<TUser | null>(null)
-  const posts = ref<TPost[]>([])
-  const post = ref<TPost | null>(null)
-  const sharedPosts = ref<TSharedPost[]>([])
-  const commentsLoading = ref(false)
   const router = useRouter()
-
-  // fetch user using token save in local storage
-  // const getUser = (token: string | null) => {}
+  const posts = ref<TPost[]>([])
+  const commentsLoading = ref(false)
+  const post = ref<TPost | null>(null)
+  const user = ref<TUser | null>(null)
+  const userToken = ref<string | null>(null)
+  const sharedPosts = ref<TSharedPost[]>([])
 
   const persistUser = () => {
     const token = localStorage.getItem('token')
