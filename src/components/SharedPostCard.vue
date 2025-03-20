@@ -57,7 +57,7 @@ const open = ref<boolean>(false)
           </p>
         </span>
       </div>
-      <div class="content" style="text-decoration: none; color: white">
+      <div class="content" style="text-decoration: none; color: var(--color-text)">
         <p style="white-space: pre-line; line-height: 1.2; letter-spacing: 0.05">
           {{ content }}
         </p>
@@ -66,16 +66,16 @@ const open = ref<boolean>(false)
 
     <div class="interaction-container">
       <button class="interaction-btn icon">
-        <p style="color: white">{{ props.likes.length }}</p>
+        <p style="color: var(--color-text)">{{ props.likes.length }}</p>
         <Vicon class="like" name="fa-thumbs-up" />
       </button>
 
       <button class="interaction-btn icon">
-        <p style="color: white">{{ props.comments.length }}</p>
+        <p style="color: var(--color-text)">{{ props.comments.length }}</p>
         <Vicon class="comment" name="fa-comment-dots" />
       </button>
       <button class="interaction-btn icon">
-        <p style="color: white">1</p>
+        <p style="color: var(--color-text)">1</p>
         <Vicon class="share" name="fa-share" />
       </button>
     </div>
@@ -123,7 +123,7 @@ const open = ref<boolean>(false)
               </p>
             </span>
           </div>
-          <div class="content" style="text-decoration: none; color: white">
+          <div class="content" style="text-decoration: none; color: var(--color-text)">
             <p style="white-space: pre-line; line-height: 1.2; letter-spacing: 0.05">
               {{ content }}
             </p>
@@ -188,11 +188,11 @@ const open = ref<boolean>(false)
 
 .original-creator-info h3 {
   font-size: 14px;
-  color: white;
+  color: var(--color-text);
 }
 
 .creator-info h3 {
-  color: white;
+  color: var(--color-text);
 }
 
 .content {
@@ -223,7 +223,7 @@ const open = ref<boolean>(false)
 }
 
 .icon {
-  color: white;
+  color: var(--color-text);
 }
 
 .icon:hover {

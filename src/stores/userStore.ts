@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import type { TLogin, TPost, TSharedPost, TUser } from '@/types/user'
+import type { TLikes, TLogin, TPost, TSharedPost, TUser } from '@/types/user'
 import { useToast } from 'vue-toastification'
 import { useRouter } from 'vue-router'
 
@@ -10,6 +10,7 @@ export const useUserStore = defineStore('userStore', () => {
   const userToken = ref<string | null>(null)
   const user = ref<TUser | null>(null)
   const posts = ref<TPost[]>([])
+  const post = ref<TPost | null>(null)
   const sharedPosts = ref<TSharedPost[]>([])
   const commentsLoading = ref(false)
   const router = useRouter()
@@ -150,6 +151,12 @@ export const useUserStore = defineStore('userStore', () => {
 
   const getPost = (postId: string | string[]) => {
     return posts.value.find((item) => item.id === postId)
+
+    // if (foundPost) return (post.value = foundPost)
+    // const posts = localStorage.getItem('posts')
+    // if (posts) {
+    //   return JSON.parse(posts).find((item: TPost) => item.id === postId)
+    // }
   }
 
   const addComment = ({
@@ -161,41 +168,67 @@ export const useUserStore = defineStore('userStore', () => {
     comment: string
     user: TUser
   }) => {
-    const post = posts.value.find((item) => item.id === postId)
+    const localStoragePosts = localStorage.getItem('posts')
+    if (!localStoragePosts) return toast.error('Posts not found!')
+
+    const post = posts.value.find((item: TPost) => item.id === postId)
+
     commentsLoading.value = true
     setTimeout(() => {
       if (post && user) {
-        post.comments = [
-          ...post.comments,
-          {
-            id: String(post.comments.length),
-            content: comment,
-            createdAt: new Date(),
-            post: post,
-            user: user,
-          },
-        ].reverse()
+        const updatedposts: TPost[] = JSON.parse(localStoragePosts).map((item: TPost) =>
+          item.id === postId
+            ? {
+                ...item,
+                comments: [
+                  ...item.comments,
+                  {
+                    id: String(post.comments.length),
+                    content: comment,
+                    createdAt: new Date(),
+                    post: post,
+                    user: user,
+                  },
+                ],
+              }
+            : item,
+        )
+        posts.value = updatedposts
+        localStorage.setItem('posts', JSON.stringify(updatedposts))
+        commentsLoading.value = false
+        return JSON.parse(localStoragePosts).find((item: TPost) => item.id === postId)
       }
-      commentsLoading.value = false
-    }, 1000)
+    }, 500)
   }
 
   const likePost = (postId: string, user: TUser) => {
-    const post = posts.value.find((item) => item.id === postId)
-    if (!post) return 'Post not found'
+    const post = posts.value.find((item: TPost) => item.id === postId)
+    if (!post) return toast.error('Post not found')
 
-    const isLiked = post.likes.some((like) => like.user.id === user.id)
+    const isLiked = post.likes.some((like: TLikes) => like.user.id === user.id)
+
+    let UpdatedPosts
     if (isLiked) {
-      return (post.likes = post.likes.filter((like) => like.user.id !== user.id))
+      UpdatedPosts = posts.value.map((item: TPost) =>
+        item.id === post.id
+          ? {
+              ...item,
+              likes: item.likes.filter((like: TLikes) => like.user.id !== user.id),
+            }
+          : item,
+      )
+    } else {
+      UpdatedPosts = posts.value.map((item: TPost) =>
+        item.id === post.id
+          ? {
+              ...item,
+              likes: [...item.likes, { id: Math.random().toString(), post: post, user: user }],
+            }
+          : item,
+      )
     }
-    post.likes = [
-      ...post.likes,
-      {
-        id: Math.random().toString(),
-        post: post,
-        user: user,
-      },
-    ]
+    posts.value = UpdatedPosts
+    localStorage.setItem('posts', JSON.stringify(UpdatedPosts))
   }
 
   const sharePost = (post: TPost, user: TUser) => {
@@ -232,6 +265,7 @@ export const useUserStore = defineStore('userStore', () => {
     userToken,
     user,
     posts,
+    post,
     sharedPosts,
     commentsLoading,
     getAllSharedPost,

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import PostCard from '@/components/PostCard.vue'
 import { useUserStore } from '@/stores/userStore'
-import type { TPost } from '@/types/user'
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { OhVueIcon as Vicon } from 'oh-vue-icons'
+import { type TPost } from '@/types/user'
 
 const loading = ref(false)
 const newComment = ref('')
@@ -12,7 +12,6 @@ const newComment = ref('')
 const router = useRoute()
 const userStore = useUserStore()
 const post = ref<TPost | undefined>(undefined)
-
 const handleAddComment = (postId: string) => {
   if (userStore.user) {
     userStore.addComment({
@@ -40,6 +39,7 @@ watch(
 <template>
   <div class="post">
     <h1 v-if="loading">Loading....</h1>
+
     <div v-if="post">
       <div class="content">
         <Vicon @click="$router.back()" class="go-back" name="fa-arrow-left" />
@@ -89,10 +89,6 @@ watch(
           </div>
         </div>
       </div>
-    </div>
-
-    <div v-else>
-      <h1>Post not found</h1>
     </div>
   </div>
 </template>

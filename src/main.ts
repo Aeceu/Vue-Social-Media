@@ -21,6 +21,7 @@ import {
   FaSearch,
   FaMoon,
   FaSun,
+  FaImage,
 } from 'oh-vue-icons/icons'
 import { addIcons, OhVueIcon } from 'oh-vue-icons'
 import Toast, { POSITION } from 'vue-toastification'
@@ -44,6 +45,7 @@ addIcons(
   FaSearch,
   FaMoon,
   FaSun,
+  FaImage,
 )
 
 const app = createApp(App)

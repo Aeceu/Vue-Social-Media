@@ -9,6 +9,7 @@ export type TUser = {
 export type TPost = {
   id: string
   content: string
+  postImage: string | null
   user: TUser
   createdAt: Date | string
   comments: TComment[]

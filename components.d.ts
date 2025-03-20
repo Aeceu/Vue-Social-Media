@@ -10,6 +10,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AsideView: typeof import('./src/components/AsideView.vue')['default']
     CommentView: typeof import('./src/components/CommentView.vue')['default']
+    ElButton: typeof import('element-plus/es')['ElButton']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     HeaderView: typeof import('./src/components/HeaderView.vue')['default']

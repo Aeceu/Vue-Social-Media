@@ -3,8 +3,11 @@ import { useUserStore } from '@/stores/userStore'
 import { ref, computed, onMounted } from 'vue'
 import PostCard from './PostCard.vue'
 import SharedPostCard from './SharedPostCard.vue'
+import { OhVueIcon as Vicon } from 'oh-vue-icons'
+import { handleFile } from '@/lib/HandleFile'
 
 const content = ref<string>('')
+const postImage = ref<string | null>(null)
 
 const userStore = useUserStore()
 
@@ -16,6 +19,7 @@ const handleAddPost = () => {
     userStore.addPost({
       id: Math.random().toString(),
       content: content.value,
+      postImage: postImage.value,
       createdAt: new Date(),
       user: userStore.user,
       comments: [],
@@ -29,6 +33,16 @@ const handleAddPost = () => {
 
 const handleCancelPost = () => {
   content.value = ''
+  postImage.value = null
+}
+
+const onFileChange = async (e: Event) => {
+  try {
+    const res = await handleFile(e)
+    postImage.value = res
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 onMounted(() => {
@@ -51,10 +65,23 @@ onMounted(() => {
         placeholder="create post...."
         resizable
       />
-      <span class="btns-group">
-        <button class="btn create" @click="handleAddPost">Create</button>
-        <button class="btn cancel" @click="handleCancelPost">Cancel</button>
-      </span>
+      <div class="create-post-bottom">
+        <label for="image">
+          <Vicon class="icon" name="fa-image" />
+        </label>
+        <input
+          v-on:change="onFileChange"
+          type="file"
+          name="image"
+          id="image"
+          style="display: none"
+          accept="image/*"
+        />
+        <span class="btns-group">
+          <button class="btn create" @click="handleAddPost">Create</button>
+          <button class="btn cancel" @click="handleCancelPost">Cancel</button>
+        </span>
+      </div>
     </div>
 
     <div class="post-feed" v-if="userPosts.length > 0">
@@ -70,6 +97,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
+* {
+  /* border: 1px solid red !important; */
+}
+
 .newsfeed {
   overflow: hidden;
   width: 100%;
@@ -84,13 +115,34 @@ onMounted(() => {
   width: 600px;
   height: fit-content;
   max-height: 200px;
+  /* background: var(--color-background-soft); */
 
   padding: 1em;
   border: 1px solid var(--color-background-mute);
+  /* box-shadow: 3px 3px 5px 0px var(--color-background-mute); */
   border-radius: 0.5em;
   display: flex;
   flex-direction: column;
   gap: 1em;
+}
+
+.icon {
+  width: 25px;
+  height: 25px;
+}
+
+.icon:hover {
+  scale: 1.1;
+  cursor: pointer;
+  animation-duration: 300s;
+  transition: all 0.3s;
+  color: var(--color-green);
+}
+
+.create-post-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .create-post-textarea {
@@ -100,10 +152,10 @@ onMounted(() => {
   width: 100%;
   height: 100%;
 
-  background: inherit;
+  background: var(--color-background-mute);
   border: none;
   outline: none;
-  color: white;
+  color: var(--color-text);
   padding: 1em;
   border-radius: 0.5em;
   border: 1px solid var(--color-background-mute);

@@ -88,6 +88,7 @@ watch(
         {{ content }}
       </p>
     </router-link>
+    <img v-if="props.postImage" v-bind:src="props.postImage" alt="postImage" class="postImage" />
     <div class="interaction-container">
       <button @click="handleLike(props.id)" class="interaction-btn icon">
         <p style="color: var(--color-text)">{{ props.likes.length }}</p>
@@ -154,6 +155,7 @@ watch(
 
 .post-card {
   color: var(--color-text);
+  /* background-color: var(--color-background-soft); */
   padding: 1em;
   border: 1px solid var(--color-background-mute);
   border-radius: 0.5em;
@@ -197,6 +199,14 @@ watch(
     margin-top: 1em;
     padding: 1em;
     border: 1px solid var(--color-background-mute);
+    border-radius: 0.5em;
+  }
+
+  .postImage {
+    width: 100%;
+    height: 300px;
+    margin-top: 1em;
+    object-fit: cover;
     border-radius: 0.5em;
   }
 
@@ -314,6 +324,7 @@ watch(
       padding: 1em;
       border-radius: 0.5em;
       border: 1px solid var(--color-background-mute);
+      color: var(--color-text);
 
       width: 100%;
       min-width: 100%;
