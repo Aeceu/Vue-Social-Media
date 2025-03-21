@@ -2,12 +2,12 @@
 import { type TSharedPost } from '@/types/user'
 import { OhVueIcon as Vicon } from 'oh-vue-icons'
 import moment from 'moment'
-import { useUserStore } from '@/stores/userStore'
 import { ref } from 'vue'
+import { useSharedPostStore } from '@/stores/sharedPostStore'
 
 const props = defineProps<TSharedPost>()
 
-const userStore = useUserStore()
+const sharedPostStore = useSharedPostStore()
 const open = ref<boolean>(false)
 </script>
 <template>
@@ -34,7 +34,7 @@ const open = ref<boolean>(false)
           name="fa-edit"
         />
         <Vicon
-          @click="userStore.deleteSharedPost(props.id)"
+          @click="sharedPostStore.deleteSharedPost(props.id)"
           style="color: var(--color-red); cursor: pointer"
           class="icon"
           name="fa-trash"

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { usePostStore } from '@/stores/postStore'
 import { useUserStore } from '@/stores/userStore'
 import { type TPost } from '@/types/user'
 import { ref } from 'vue'
@@ -7,10 +8,11 @@ const props = defineProps<TPost>()
 
 const newComment = ref('')
 const userStore = useUserStore()
+const postStore = usePostStore()
 
 const handleAddComment = () => {
   if (userStore.user) {
-    userStore.addComment({
+    postStore.addComment({
       postId: props.id,
       comment: newComment.value,
       user: userStore.user,
@@ -36,7 +38,7 @@ const handleAddComment = () => {
         resizable
       />
       <Vicon
-        v-if="userStore.commentsLoading"
+        v-if="postStore.commentsLoading"
         animaton="spin"
         class="icon"
         name="fa-paper-plane"

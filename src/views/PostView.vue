@@ -5,16 +5,19 @@ import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { OhVueIcon as Vicon } from 'oh-vue-icons'
 import { type TPost } from '@/types/user'
+import { usePostStore } from '@/stores/postStore'
 
 const loading = ref(false)
 const newComment = ref('')
 
 const router = useRoute()
 const userStore = useUserStore()
+const postStore = usePostStore()
+
 const post = ref<TPost | undefined>(undefined)
 const handleAddComment = (postId: string) => {
   if (userStore.user) {
-    userStore.addComment({
+    postStore.addComment({
       postId: postId,
       comment: newComment.value,
       user: userStore.user,
@@ -28,7 +31,7 @@ watch(
   () => {
     loading.value = true
     setTimeout(() => {
-      post.value = userStore.getPost(router.params.id)
+      post.value = postStore.getPost(router.params.id)
       loading.value = false
     }, 1000)
   },
@@ -63,7 +66,7 @@ watch(
           />
 
           <Vicon
-            v-if="userStore.commentsLoading === false"
+            v-if="postStore.commentsLoading === false"
             class="icon"
             name="fa-paper-plane"
             @click="handleAddComment(post.id)"

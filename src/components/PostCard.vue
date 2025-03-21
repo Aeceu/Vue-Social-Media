@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { usePostStore } from '@/stores/postStore'
+import { useSharedPostStore } from '@/stores/sharedPostStore'
 import { useUserStore } from '@/stores/userStore'
 import type { TPost } from '@/types/user'
 import moment from 'moment'
@@ -12,6 +14,8 @@ interface IEditPost {
 const props = defineProps<TPost>()
 
 const userStore = useUserStore()
+const postStore = usePostStore()
+const sharedPostStore = useSharedPostStore()
 const isLiked = ref(false)
 const open = ref<boolean>(false)
 
@@ -23,16 +27,16 @@ const handleCancel = () => {
 }
 
 const handleEditPost = ({ postId, newContent }: IEditPost) => {
-  userStore.editPost({ newContent, postId })
+  postStore.editPost({ newContent, postId })
   open.value = false
 }
 
 const handleLike = (postId: string) => {
-  if (userStore.user) userStore.likePost(postId, userStore.user)
+  if (userStore.user) postStore.likePost(postId, userStore.user)
 }
 
 const handleSharePost = () => {
-  if (userStore.user) userStore.sharePost(props, userStore.user)
+  if (userStore.user) sharedPostStore.sharePost(props, userStore.user)
 }
 
 watch(
@@ -72,7 +76,7 @@ watch(
         <Vicon
           style="color: var(--color-red); cursor: pointer"
           class="icon"
-          @click="userStore.deletePost(id)"
+          @click="postStore.deletePost(id)"
           name="fa-trash"
         />
       </div>

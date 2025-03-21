@@ -5,18 +5,22 @@ import PostCard from './PostCard.vue'
 import SharedPostCard from './SharedPostCard.vue'
 import { OhVueIcon as Vicon } from 'oh-vue-icons'
 import { handleFile } from '@/lib/HandleFile'
+import { usePostStore } from '@/stores/postStore'
+import { useSharedPostStore } from '@/stores/sharedPostStore'
 
 const content = ref<string>('')
 const postImage = ref<string | null>(null)
 
 const userStore = useUserStore()
+const postStore = usePostStore()
+const sharedPostStore = useSharedPostStore()
 
-const userPosts = computed(() => [...userStore.posts].reverse())
-const userSharedPosts = computed(() => [...userStore.sharedPosts].reverse())
+const userPosts = computed(() => [...postStore.posts].reverse())
+const userSharedPosts = computed(() => [...sharedPostStore.sharedPosts].reverse())
 
 const handleAddPost = () => {
   if (userStore.user && content.value) {
-    userStore.addPost({
+    postStore.addPost({
       id: Math.random().toString(),
       content: content.value,
       postImage: postImage.value,
@@ -75,9 +79,9 @@ const onFileChange = async (e: Event) => {
       </div>
     </div>
 
-    <Vicon class="loading" name="pr-spinner" animation="spin" v-if="userStore.feedLoading" />
+    <Vicon class="loading" name="pr-spinner" animation="spin" v-if="postStore.feedLoading" />
 
-    <div class="post-feed" v-if="userPosts.length > 0">
+    <div class="post-feed" v-if="userPosts.length > 0 && !postStore.feedLoading">
       <div v-for="item in userPosts" :key="item.id">
         <PostCard v-bind="item" />
       </div>
@@ -85,7 +89,9 @@ const onFileChange = async (e: Event) => {
         <SharedPostCard v-bind="item" />
       </div>
     </div>
-    <p v-else style="margin-top: 1em">No posts available.</p>
+    <p v-if="userPosts.length <= 0 && !postStore.feedLoading" style="margin-top: 1em">
+      No posts available.
+    </p>
   </div>
 </template>
 
@@ -108,6 +114,7 @@ const onFileChange = async (e: Event) => {
   margin-top: 10px;
   width: 40px;
   height: 40px;
+  color: var(--color-blue);
 }
 
 .create-post-container {
