@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/userStore'
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import PostCard from './PostCard.vue'
 import SharedPostCard from './SharedPostCard.vue'
 import { OhVueIcon as Vicon } from 'oh-vue-icons'
@@ -44,15 +44,6 @@ const onFileChange = async (e: Event) => {
     console.log(e)
   }
 }
-
-onMounted(() => {
-  // fetch local storage items
-  // set data to store in local storage
-  userStore.getAllPosts()
-  userStore.persistUser()
-  // console.log(userStore.getAllSharedPost())
-  // console.log(userStore.getAllUsers())
-})
 </script>
 
 <template>
@@ -84,6 +75,8 @@ onMounted(() => {
       </div>
     </div>
 
+    <Vicon class="loading" name="pr-spinner" animation="spin" v-if="userStore.feedLoading" />
+
     <div class="post-feed" v-if="userPosts.length > 0">
       <div v-for="item in userPosts" :key="item.id">
         <PostCard v-bind="item" />
@@ -109,6 +102,12 @@ onMounted(() => {
   padding: 1em;
   align-items: center;
   overflow-y: auto;
+}
+
+.loading {
+  margin-top: 10px;
+  width: 40px;
+  height: 40px;
 }
 
 .create-post-container {

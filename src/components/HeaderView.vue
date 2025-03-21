@@ -60,7 +60,7 @@ const search = ref('')
 
 .header {
   height: 80px;
-  background-color: var(--color-blue);
+  background-color: var(--color-green);
   color: white;
   display: flex;
   align-items: center;

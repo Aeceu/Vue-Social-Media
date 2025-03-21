@@ -8,22 +8,30 @@ const toast = useToast()
 
 export const useUserStore = defineStore('userStore', () => {
   const router = useRouter()
-  const posts = ref<TPost[]>([])
-  const commentsLoading = ref(false)
-  const post = ref<TPost | null>(null)
+  const timeoutTime = 1000
+
   const user = ref<TUser | null>(null)
+  const post = ref<TPost | null>(null)
+
   const userToken = ref<string | null>(null)
+
+  const posts = ref<TPost[]>([])
+  const users = ref<TUser[]>([])
   const sharedPosts = ref<TSharedPost[]>([])
+
+  const commentsLoading = ref(false)
+  const usersLoading = ref(false)
+  const feedLoading = ref(false)
 
   const persistUser = () => {
     const token = localStorage.getItem('token')
-    if (!token) return console.log("User's token not found")
+    if (!token) return toast.error("User's token not found")
 
     const users = localStorage.getItem('users')
-    if (!users) return console.log('All users not found')
+    if (!users) return toast.error('All users not found')
 
     const foundUser = JSON.parse(users).find((item: TUser) => item.id === token)
-    if (!foundUser) return console.log("User's data not found")
+    if (!foundUser) return toast.error("User's data not found")
 
     user.value = foundUser
 
@@ -96,19 +104,26 @@ export const useUserStore = defineStore('userStore', () => {
   }
 
   const getAllUsers = () => {
-    const res = localStorage.getItem('users')
-    if (res) {
-      return (user.value = JSON.parse(res))
-    }
-    return []
+    usersLoading.value = true
+    setTimeout(() => {
+      const res = localStorage.getItem('users')
+      if (res) {
+        users.value = JSON.parse(res)
+      }
+
+      usersLoading.value = false
+    }, timeoutTime)
   }
 
   const getAllPosts = () => {
-    const res = localStorage.getItem('posts')
-    if (res) {
-      return (posts.value = JSON.parse(res))
-    }
-    return (posts.value = [])
+    feedLoading.value = true
+    setTimeout(() => {
+      const res = localStorage.getItem('posts')
+      if (res) {
+        posts.value = JSON.parse(res)
+      }
+      feedLoading.value = false
+    }, timeoutTime)
   }
 
   const getAllSharedPost = () => {
@@ -261,10 +276,13 @@ export const useUserStore = defineStore('userStore', () => {
   return {
     userToken,
     user,
+    users,
     posts,
     post,
     sharedPosts,
     commentsLoading,
+    feedLoading,
+    usersLoading,
     getAllSharedPost,
     getAllUsers,
     getAllPosts,

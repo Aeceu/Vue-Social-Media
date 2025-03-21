@@ -1,28 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { OhVueIcon as Vicon } from 'oh-vue-icons'
-const dummyUsers = ref([
-  {
-    id: 1,
-    firstName: 'Jane',
-    lastName: 'Doe',
-    email: 'janedoe@gmail.come',
-  },
-  {
-    id: 2,
-    firstName: 'Tony',
-    lastName: 'Stark',
-    email: 'tonystark@gmail.come',
-  },
-  {
-    id: 3,
-    firstName: 'Jon',
-    lastName: 'Snow',
-    email: 'jonsow@gmail.come',
-  },
-])
+import { useUserStore } from '@/stores/userStore'
 
 const search = ref('')
+const userStore = useUserStore()
 </script>
 <template>
   <el-aside class="aside">
@@ -36,7 +18,9 @@ const search = ref('')
       </template>
     </el-input>
 
-    <div class="user-lists" v-for="item in dummyUsers" :key="item.id">
+    <Vicon class="loading" name="pr-spinner" animation="spin" v-if="userStore.usersLoading" />
+
+    <div class="user-lists" v-for="item in userStore.users" :key="item.id">
       <div class="user-container">
         <img
           src="https://images.pexels.com/photos/697509/pexels-photo-697509.jpeg?cs=srgb&dl=pexels-andrewperformance1-697509.jpg&fm=jpg"
@@ -64,9 +48,18 @@ const search = ref('')
   padding: 1.5em;
   display: flex;
   flex-direction: column;
+  align-items: center;
   /* gap: 1em; */
 
+  .loading {
+    margin-top: 10px;
+    width: 40px;
+    height: 40px;
+    color: var(--color-blue);
+  }
+
   .user-lists {
+    width: 100%;
     display: flex;
     flex-direction: column;
     gap: 1em;
@@ -74,6 +67,7 @@ const search = ref('')
   }
 
   .user-container {
+    width: 100%;
     display: flex;
     align-items: center;
     gap: 1em;

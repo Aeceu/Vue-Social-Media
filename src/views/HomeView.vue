@@ -3,6 +3,16 @@ import HeaderView from '@/components/HeaderView.vue'
 import NewsFeedView from '@/components/NewsFeedView.vue'
 import SideView from '@/components/SideView.vue'
 import UsersView from '@/components/UsersView.vue'
+import { useUserStore } from '@/stores/userStore'
+import { onMounted } from 'vue'
+
+const userStore = useUserStore()
+
+onMounted(() => {
+  userStore.getAllPosts()
+  userStore.persistUser()
+  userStore.getAllUsers()
+})
 </script>
 
 <template>
